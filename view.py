@@ -1,39 +1,162 @@
 import sys
-import controller
-import model
+
 import matplotlib
 from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import (
+    QApplication, QMainWindow, QWidget,
+)
+from matplotlib.backends.backend_qt5 import NavigationToolbar2QT
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
+
+import controller
+import model
+from main_window import Ui_MainWindow
 
 matplotlib.use('Qt5Agg')
 
 
 class MplCanvas(FigureCanvasQTAgg):
-    def __init__(self, parent=None, width=5, height=4, dpi=100):
-        fig = Figure(figsize=(width, height), dpi=dpi)
+
+    def __init__(self, parent=None):
+        fig = Figure()
         self.axes = fig.add_subplot(111)
         super(MplCanvas, self).__init__(fig)
 
 
-class MainWindow(QtWidgets.QMainWindow):
+class MplWidget(QWidget):
+    def __init__(self, parent=None):
+        QWidget.__init__(self, parent)
+        self.show_dots = False
+        self.canvas = MplCanvas()
+        self.axes = self.canvas.axes
+        self.refresh()
 
-    def __init__(self, *args, **kwargs):
-        super(MainWindow, self).__init__(*args, **kwargs)
+        toolbar = NavigationToolbar2QT(self.canvas, self)
 
-        # Create the matplotlib FigureCanvas object,
-        # which defines a single set of axes as self.axes.
-        sc = MplCanvas(self, width=5, height=4, dpi=100)
-        s2 = MplCanvas(self, width=5, height=4, dpi=100)
-        sc.axes.plot(model.exact_sol.get_grid().x_values, model.exact_sol.get_grid().y_values, 'g')
-        s2.axes.plot(model.imp_euler_met.get_grid().x_values, model.imp_euler_met.get_grid().y_values, 'r')
-        self.setCentralWidget(sc)
-        self.setMenuWidget(s2)
-
+        layout = QtWidgets.QVBoxLayout()
+        layout.addWidget(toolbar)
+        layout.addWidget(self.canvas)
+        self.setLayout(layout)
         self.show()
 
+    def refresh(self):
+        pass
 
-if __name__ == '__main__':
-    app = QtWidgets.QApplication(sys.argv)
-    w = MainWindow()
-    app.exec_()
+    def _update_values(self, grids, params):
+        self.axes.cla()
+        for grid in [grids[x] for x in range(len(grids)) if params[x]]:
+            self.plot(grid[0].x_values, grid[0].y_values, grid[1])
+        self.canvas.draw()
+
+    def plot(self, x: list, y: list, desc: str):
+        if self.show_dots is True:
+            self.axes.plot(x, y, '-D', label=desc)
+        else:
+            self.axes.plot(x, y, '-', label=desc)
+        self.axes.legend()
+
+
+class Window(QMainWindow, Ui_MainWindow):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setupUi(self)
+        self.connect_signals_slots()
+        self.set_default_values()
+
+    def connect_signals_slots(self):
+        self.n0_err_spinBox.valueChanged['int'].connect(self.change_rng_err)
+        self.N_err_spinBox.valueChanged['int'].connect(self.change_rng_err)
+        self.exact_sol_checkBox.clicked.connect(self.change_checkbox)
+        self.euler_met_checkBox.clicked.connect(self.change_checkbox)
+        self.imp_euler_met_checkBox.clicked.connect(self.change_checkbox)
+        self.rungekutta_met_checkBox.clicked.connect(self.change_checkbox)
+        self.show_dots_checkBox.clicked.connect(self.change_point_marker)
+        self.X_doubleSpinBox.valueChanged['double'].connect(self.change_grid)
+        self.N_spinBox.valueChanged['int'].connect(self.change_grid)
+        self.x0_doubleSpinBox.valueChanged['double'].connect(self.change_grid)
+        self.y0_doubleSpinBox.valueChanged['double'].connect(self.change_grid)
+
+    def set_default_values(self):
+        self.n0_err_spinBox.setValue(model.rng_err_n0)
+        self.N_err_spinBox.setValue(model.rng_err_n)
+        self.X_doubleSpinBox.setValue(model.main_grid.x_end)
+        self.N_spinBox.setValue(model.main_grid.step_num)
+        self.x0_doubleSpinBox.setValue(model.main_grid.x_start)
+        self.y0_doubleSpinBox.setValue(model.main_grid.y_start)
+        self.exact_sol_checkBox.setChecked(model.show_exact)
+        self.euler_met_checkBox.setChecked(model.show_euler)
+        self.imp_euler_met_checkBox.setChecked(model.show_imp_euler)
+        self.rungekutta_met_checkBox.setChecked(model.show_runge_kutta)
+        self.show_dots_checkBox.setChecked(MplWidget().show_dots)
+
+    def change_rng_err(self):
+        if controller.change_rng_err(self.n0_err_spinBox.value(), self.N_err_spinBox.value()):
+            self.RangeErrorsWidget.refresh()
+        else:
+            self.n0_err_spinBox.setValue(model.rng_err_n0)
+            self.N_err_spinBox.setValue(model.rng_err_n)
+
+    def change_checkbox(self):
+        if controller.change_checkbox(self.exact_sol_checkBox.isChecked(), self.euler_met_checkBox.isChecked(),
+                                      self.imp_euler_met_checkBox.isChecked(),
+                                      self.rungekutta_met_checkBox.isChecked()):
+            self.SolutionsWidget.refresh()
+            self.ErrorsWidget.refresh()
+            self.RangeErrorsWidget.refresh()
+
+    def change_grid(self):
+        if controller.change_grid(model.Grid(self.N_spinBox.value(), self.X_doubleSpinBox.value(),
+                                             self.x0_doubleSpinBox.value(), self.y0_doubleSpinBox.value())):
+            self.SolutionsWidget.refresh()
+            self.ErrorsWidget.refresh()
+            self.RangeErrorsWidget.refresh()
+        else:
+            self.X_doubleSpinBox.setValue(model.main_grid.x_end)
+            self.N_spinBox.setValue(model.main_grid.step_num)
+            self.x0_doubleSpinBox.setValue(model.main_grid.x_start)
+            self.y0_doubleSpinBox.setValue(model.main_grid.y_start)
+
+    def change_point_marker(self):
+        show_dots = self.show_dots_checkBox.isChecked()
+        self.SolutionsWidget.show_dots = show_dots
+        self.ErrorsWidget.show_dots = show_dots
+        self.RangeErrorsWidget.show_dots = show_dots
+        self.SolutionsWidget.refresh()
+        self.ErrorsWidget.refresh()
+        self.RangeErrorsWidget.refresh()
+
+
+class SolutionsWidget(MplWidget):
+    def refresh(self):
+        grids = [(model.exact_sol.get_grid(), 'Analytical solution'),
+                 (model.euler_met.get_grid(), 'Euler method'),
+                 (model.imp_euler_met.get_grid(), 'Improved Euler method'),
+                 (model.runge_kutta_met.get_grid(), 'Runge-Kutta method')]
+        params = [model.show_exact, model.show_euler, model.show_imp_euler, model.show_runge_kutta]
+        self._update_values(grids, params)
+
+
+class ErrorsWidget(MplWidget):
+    def refresh(self):
+        grids = [(model.euler_err.get_grid(), 'Euler method'),
+                 (model.imp_euler_err.get_grid(), 'Improved Euler method'),
+                 (model.runge_kutta_err.get_grid(), 'Runge-Kutta method')]
+        params = [model.show_euler, model.show_imp_euler, model.show_runge_kutta]
+        self._update_values(grids, params)
+
+
+class RangeErrorsWidget(MplWidget):
+    def refresh(self):
+        grids = [(model.euler_rng_err.get_grid(), 'Euler method'),
+                 (model.imp_euler_rng_err.get_grid(), 'Improved Euler method'),
+                 (model.runge_kutta_rng_err.get_grid(), 'Runge-Kutta method')]
+        params = [model.show_euler, model.show_imp_euler, model.show_runge_kutta]
+        self._update_values(grids, params)
+
+
+def launch_gui():
+    app = QApplication(sys.argv)
+    window = Window()
+    window.show()
+    sys.exit(app.exec())

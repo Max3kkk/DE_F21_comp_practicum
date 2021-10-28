@@ -1,0 +1,622 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+    <class>MainWindow</class>
+    <widget class="QMainWindow" name="MainWindow">
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>1224</width>
+                <height>804</height>
+            </rect>
+        </property>
+        <property name="windowTitle">
+            <string>Computational Practicum</string>
+        </property>
+        <property name="toolTip">
+            <string/>
+        </property>
+        <property name="whatsThis">
+            <string/>
+        </property>
+        <property name="windowFilePath">
+            <string/>
+        </property>
+        <property name="documentMode">
+            <bool>true</bool>
+        </property>
+        <property name="tabShape">
+            <enum>QTabWidget::Rounded</enum>
+        </property>
+        <widget class="QWidget" name="centralwidget">
+            <widget class="QWidget" name="layoutWidget">
+                <property name="geometry">
+                    <rect>
+                        <x>630</x>
+                        <y>310</y>
+                        <width>104</width>
+                        <height>72</height>
+                    </rect>
+                </property>
+                <layout class="QGridLayout" name="err_gridLayout">
+                    <item row="0" column="0">
+                        <widget class="QLabel" name="n0_err_label">
+                            <property name="text">
+                                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;
+                                    font-size:12pt; font-weight:600;&quot;&gt;n&lt;/span&gt;&lt;span style=&quot;
+                                    font-size:12pt; font-weight:600; vertical-align:sub;&quot;&gt;0&lt;/span&gt;&lt;span
+                                    style=&quot; font-size:12pt; font-weight:600;&quot;&gt;:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+                                </string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item row="1" column="0">
+                        <widget class="QLabel" name="N_err_label">
+                            <property name="text">
+                                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;
+                                    font-size:12pt; font-weight:600;&quot;&gt;N:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+                                </string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item row="0" column="1">
+                        <widget class="QSpinBox" name="n0_err_spinBox">
+                            <property name="minimum">
+                                <number>1</number>
+                            </property>
+                            <property name="maximum">
+                                <number>10000</number>
+                            </property>
+                            <property name="singleStep">
+                                <number>1</number>
+                            </property>
+                            <property name="value">
+                                <number>5</number>
+                            </property>
+                        </widget>
+                    </item>
+                    <item row="1" column="1">
+                        <widget class="QSpinBox" name="N_err_spinBox">
+                            <property name="minimum">
+                                <number>2</number>
+                            </property>
+                            <property name="maximum">
+                                <number>10000</number>
+                            </property>
+                            <property name="singleStep">
+                                <number>1</number>
+                            </property>
+                            <property name="value">
+                                <number>30</number>
+                            </property>
+                        </widget>
+                    </item>
+                </layout>
+            </widget>
+            <widget class="QWidget" name="layoutWidget">
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>400</y>
+                        <width>581</width>
+                        <height>381</height>
+                    </rect>
+                </property>
+                <layout class="QVBoxLayout" name="err_verticalLayout">
+                    <property name="sizeConstraint">
+                        <enum>QLayout::SetNoConstraint</enum>
+                    </property>
+                    <item>
+                        <widget class="QLabel" name="err_label">
+                            <property name="sizePolicy">
+                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>0</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="font">
+                                <font>
+                                    <pointsize>12</pointsize>
+                                </font>
+                            </property>
+                            <property name="text">
+                                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;
+                                    font-size:12pt; font-weight:600;&quot;&gt;Error of numerical methods:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+                                </string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="ErrorsWidget" name="ErrorsWidget" native="true">
+                            <property name="minimumSize">
+                                <size>
+                                    <width>450</width>
+                                    <height>300</height>
+                                </size>
+                            </property>
+                        </widget>
+                    </item>
+                </layout>
+            </widget>
+            <widget class="QWidget" name="layoutWidget">
+                <property name="geometry">
+                    <rect>
+                        <x>630</x>
+                        <y>400</y>
+                        <width>581</width>
+                        <height>381</height>
+                    </rect>
+                </property>
+                <layout class="QVBoxLayout" name="rng_err_verticalLayout">
+                    <item>
+                        <widget class="QLabel" name="rng_err_label">
+                            <property name="sizePolicy">
+                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="font">
+                                <font>
+                                    <pointsize>12</pointsize>
+                                    <weight>75</weight>
+                                    <bold>true</bold>
+                                </font>
+                            </property>
+                            <property name="text">
+                                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;
+                                    font-size:12pt; font-weight:600;&quot;&gt;Error in range from n&lt;/span&gt;&lt;span
+                                    style=&quot; font-size:12pt; font-weight:600; vertical-align:sub;&quot;&gt;0&lt;/span&gt;&lt;span
+                                    style=&quot; font-size:12pt; font-weight:600;&quot;&gt; to N:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+                                </string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="RangeErrorsWidget" name="RangeErrorsWidget" native="true">
+                            <property name="minimumSize">
+                                <size>
+                                    <width>450</width>
+                                    <height>300</height>
+                                </size>
+                            </property>
+                            <property name="font">
+                                <font>
+                                    <pointsize>10</pointsize>
+                                    <weight>50</weight>
+                                    <bold>false</bold>
+                                </font>
+                            </property>
+                        </widget>
+                    </item>
+                </layout>
+            </widget>
+            <widget class="QWidget" name="layoutWidget">
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>0</y>
+                        <width>581</width>
+                        <height>381</height>
+                    </rect>
+                </property>
+                <layout class="QVBoxLayout" name="sol_verticalLayout">
+                    <item>
+                        <widget class="QLabel" name="sol_label">
+                            <property name="sizePolicy">
+                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="font">
+                                <font>
+                                    <pointsize>12</pointsize>
+                                </font>
+                            </property>
+                            <property name="text">
+                                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;
+                                    font-size:12pt; font-weight:600;&quot;&gt;Plot of solutions for equation y` = 3y ^
+                                    (2/3):&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+                                </string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="SolutionsWidget" name="SolutionsWidget" native="true">
+                            <property name="sizePolicy">
+                                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>450</width>
+                                    <height>300</height>
+                                </size>
+                            </property>
+                            <property name="layoutDirection">
+                                <enum>Qt::LeftToRight</enum>
+                            </property>
+                            <property name="autoFillBackground">
+                                <bool>false</bool>
+                            </property>
+                        </widget>
+                    </item>
+                </layout>
+            </widget>
+            <widget class="QWidget" name="layoutWidget">
+                <property name="geometry">
+                    <rect>
+                        <x>630</x>
+                        <y>20</y>
+                        <width>340</width>
+                        <height>190</height>
+                    </rect>
+                </property>
+                <layout class="QHBoxLayout" name="sol_horizontalLayout">
+                    <item>
+                        <layout class="QGridLayout" name="sol_gridLayout">
+                            <item row="2" column="0">
+                                <widget class="QLabel" name="x0_label">
+                                    <property name="text">
+                                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;
+                                            font-size:12pt; font-weight:600;&quot;&gt;x&lt;/span&gt;&lt;span style=&quot;
+                                            font-size:12pt; font-weight:600; vertical-align:sub;&quot;&gt;0&lt;/span&gt;&lt;span
+                                            style=&quot; font-size:12pt; font-weight:600;&quot;&gt;:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+                                        </string>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item row="2" column="1">
+                                <widget class="QDoubleSpinBox" name="x0_doubleSpinBox">
+                                    <property name="decimals">
+                                        <number>6</number>
+                                    </property>
+                                    <property name="minimum">
+                                        <double>-10000.000000000000000</double>
+                                    </property>
+                                    <property name="maximum">
+                                        <double>10000.000000000000000</double>
+                                    </property>
+                                    <property name="singleStep">
+                                        <double>0.500000000000000</double>
+                                    </property>
+                                    <property name="value">
+                                        <double>1.000000000000000</double>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item row="3" column="1">
+                                <widget class="QDoubleSpinBox" name="y0_doubleSpinBox">
+                                    <property name="decimals">
+                                        <number>6</number>
+                                    </property>
+                                    <property name="minimum">
+                                        <double>-10000.000000000000000</double>
+                                    </property>
+                                    <property name="maximum">
+                                        <double>10000.000000000000000</double>
+                                    </property>
+                                    <property name="singleStep">
+                                        <double>0.500000000000000</double>
+                                    </property>
+                                    <property name="value">
+                                        <double>2.000000000000000</double>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item row="0" column="0">
+                                <widget class="QLabel" name="N_label">
+                                    <property name="text">
+                                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;
+                                            font-size:12pt; font-weight:600;&quot;&gt;N:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+                                        </string>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item row="1" column="0">
+                                <widget class="QLabel" name="X_label">
+                                    <property name="text">
+                                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;
+                                            font-size:12pt; font-weight:600;&quot;&gt;X:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+                                        </string>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item row="3" column="0">
+                                <widget class="QLabel" name="y0_label">
+                                    <property name="text">
+                                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot;
+                                            font-size:12pt; font-weight:600;&quot;&gt;y&lt;/span&gt;&lt;span style=&quot;
+                                            font-size:12pt; font-weight:600; vertical-align:sub;&quot;&gt;0&lt;/span&gt;&lt;span
+                                            style=&quot; font-size:12pt; font-weight:600;&quot;&gt;:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+                                        </string>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item row="0" column="1">
+                                <widget class="QSpinBox" name="N_spinBox">
+                                    <property name="minimum">
+                                        <number>2</number>
+                                    </property>
+                                    <property name="maximum">
+                                        <number>10000</number>
+                                    </property>
+                                    <property name="value">
+                                        <number>10</number>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item row="1" column="1">
+                                <widget class="QDoubleSpinBox" name="X_doubleSpinBox">
+                                    <property name="decimals">
+                                        <number>6</number>
+                                    </property>
+                                    <property name="minimum">
+                                        <double>-10000.000000000000000</double>
+                                    </property>
+                                    <property name="maximum">
+                                        <double>10000.000000000000000</double>
+                                    </property>
+                                    <property name="singleStep">
+                                        <double>0.500000000000000</double>
+                                    </property>
+                                    <property name="value">
+                                        <double>10.000000000000000</double>
+                                    </property>
+                                </widget>
+                            </item>
+                        </layout>
+                    </item>
+                    <item>
+                        <layout class="QVBoxLayout" name="checkBox_verticalLayout">
+                            <item>
+                                <widget class="QCheckBox" name="exact_sol_checkBox">
+                                    <property name="enabled">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="text">
+                                        <string>Analytical Solution</string>
+                                    </property>
+                                    <property name="checked">
+                                        <bool>true</bool>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QCheckBox" name="euler_met_checkBox">
+                                    <property name="enabled">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="text">
+                                        <string>Euler method</string>
+                                    </property>
+                                    <property name="checked">
+                                        <bool>true</bool>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QCheckBox" name="imp_euler_met_checkBox">
+                                    <property name="text">
+                                        <string>Improved Euler method</string>
+                                    </property>
+                                    <property name="checked">
+                                        <bool>true</bool>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QCheckBox" name="rungekutta_met_checkBox">
+                                    <property name="text">
+                                        <string>RungeKutta Method</string>
+                                    </property>
+                                    <property name="checked">
+                                        <bool>true</bool>
+                                    </property>
+                                </widget>
+                            </item>
+                        </layout>
+                    </item>
+                </layout>
+            </widget>
+        </widget>
+        <widget class="QStatusBar" name="statusbar"/>
+    </widget>
+    <customwidgets>
+        <customwidget>
+            <class>SolutionsWidget</class>
+            <extends>QWidget</extends>
+            <header>solutionswidget.h</header>
+            <container>1</container>
+        </customwidget>
+        <customwidget>
+            <class>ErrorsWidget</class>
+            <extends>QWidget</extends>
+            <header>errorswidget.h</header>
+            <container>1</container>
+        </customwidget>
+        <customwidget>
+            <class>RangeErrorsWidget</class>
+            <extends>QWidget</extends>
+            <header>rangeerrorswidget.h</header>
+            <container>1</container>
+        </customwidget>
+    </customwidgets>
+    <resources/>
+    <connections>
+        <connection>
+            <sender>n0_err_spinBox</sender>
+            <signal>valueChanged(int)</signal>
+            <receiver>MainWindow</receiver>
+            <slot>change_rng_err()</slot>
+            <hints>
+                <hint type="sourcelabel">
+                    <x>716</x>
+                    <y>325</y>
+                </hint>
+                <hint type="destinationlabel">
+                    <x>1070</x>
+                    <y>341</y>
+                </hint>
+            </hints>
+        </connection>
+        <connection>
+            <sender>N_err_spinBox</sender>
+            <signal>valueChanged(int)</signal>
+            <receiver>MainWindow</receiver>
+            <slot>change_rng_err()</slot>
+            <hints>
+                <hint type="sourcelabel">
+                    <x>681</x>
+                    <y>357</y>
+                </hint>
+                <hint type="destinationlabel">
+                    <x>1093</x>
+                    <y>367</y>
+                </hint>
+            </hints>
+        </connection>
+        <connection>
+            <sender>exact_sol_checkBox</sender>
+            <signal>clicked()</signal>
+            <receiver>MainWindow</receiver>
+            <slot>change_checkbox()</slot>
+            <hints>
+                <hint type="sourcelabel">
+                    <x>812</x>
+                    <y>42</y>
+                </hint>
+                <hint type="destinationlabel">
+                    <x>1077</x>
+                    <y>28</y>
+                </hint>
+            </hints>
+        </connection>
+        <connection>
+            <sender>euler_met_checkBox</sender>
+            <signal>clicked()</signal>
+            <receiver>MainWindow</receiver>
+            <slot>change_checkbox()</slot>
+            <hints>
+                <hint type="sourcelabel">
+                    <x>800</x>
+                    <y>95</y>
+                </hint>
+                <hint type="destinationlabel">
+                    <x>1073</x>
+                    <y>79</y>
+                </hint>
+            </hints>
+        </connection>
+        <connection>
+            <sender>imp_euler_met_checkBox</sender>
+            <signal>clicked()</signal>
+            <receiver>MainWindow</receiver>
+            <slot>change_checkbox()</slot>
+            <hints>
+                <hint type="sourcelabel">
+                    <x>871</x>
+                    <y>145</y>
+                </hint>
+                <hint type="destinationlabel">
+                    <x>1077</x>
+                    <y>125</y>
+                </hint>
+            </hints>
+        </connection>
+        <connection>
+            <sender>rungekutta_met_checkBox</sender>
+            <signal>clicked()</signal>
+            <receiver>MainWindow</receiver>
+            <slot>change_checkbox()</slot>
+            <hints>
+                <hint type="sourcelabel">
+                    <x>847</x>
+                    <y>188</y>
+                </hint>
+                <hint type="destinationlabel">
+                    <x>1073</x>
+                    <y>167</y>
+                </hint>
+            </hints>
+        </connection>
+        <connection>
+            <sender>X_doubleSpinBox</sender>
+            <signal>valueChanged(double)</signal>
+            <receiver>MainWindow</receiver>
+            <slot>change_grid()</slot>
+            <hints>
+                <hint type="sourcelabel">
+                    <x>683</x>
+                    <y>81</y>
+                </hint>
+                <hint type="destinationlabel">
+                    <x>1162</x>
+                    <y>247</y>
+                </hint>
+            </hints>
+        </connection>
+        <connection>
+            <sender>N_spinBox</sender>
+            <signal>valueChanged(int)</signal>
+            <receiver>MainWindow</receiver>
+            <slot>change_grid()</slot>
+            <hints>
+                <hint type="sourcelabel">
+                    <x>704</x>
+                    <y>33</y>
+                </hint>
+                <hint type="destinationlabel">
+                    <x>1090</x>
+                    <y>240</y>
+                </hint>
+            </hints>
+        </connection>
+        <connection>
+            <sender>x0_doubleSpinBox</sender>
+            <signal>valueChanged(double)</signal>
+            <receiver>MainWindow</receiver>
+            <slot>change_grid()</slot>
+            <hints>
+                <hint type="sourcelabel">
+                    <x>686</x>
+                    <y>138</y>
+                </hint>
+                <hint type="destinationlabel">
+                    <x>1011</x>
+                    <y>260</y>
+                </hint>
+            </hints>
+        </connection>
+        <connection>
+            <sender>y0_doubleSpinBox</sender>
+            <signal>valueChanged(double)</signal>
+            <receiver>MainWindow</receiver>
+            <slot>change_grid()</slot>
+            <hints>
+                <hint type="sourcelabel">
+                    <x>729</x>
+                    <y>187</y>
+                </hint>
+                <hint type="destinationlabel">
+                    <x>957</x>
+                    <y>271</y>
+                </hint>
+            </hints>
+        </connection>
+    </connections>
+    <slots>
+        <slot>change_rng_err()</slot>
+        <slot>change_grid()</slot>
+        <slot>change_checkbox()</slot>
+    </slots>
+</ui>

@@ -26,9 +26,10 @@ class Solution(ABC):
         pass
 
     def set_grid(self, new_grid: Grid):
-        self._grid = deepcopy(new_grid)
-        self._grid.y_values.clear()
-        self._solve()
+        if new_grid != self._grid:
+            self._grid = deepcopy(new_grid)
+            self._grid.y_values.clear()
+            self._solve()
 
     def get_grid(self) -> Grid:
         return self._grid
@@ -39,33 +40,30 @@ class ExactSolution(Solution, ABC):
 
 
 class MyExactSolution(ExactSolution):
-
     def _solve(self):
-        c = self._grid.x_start - np.cbrt(self._grid.y_start)
+        c = np.cbrt(self._grid.y_start) - self._grid.x_start
         for x in self._grid.x_values:
-            self._grid.y_values.append((x - c) ** 3)
+            self._grid.y_values.append((x + c) ** 3)
 
 
 class Function(ABC):
     @abstractmethod
-    def eval(self, x, y):
+    def eval(self, x: float, y: float) -> float:
         pass
 
 
 class MyFunction(Function):
-    def eval(self, x, y):
-        return 3 * (y ** (2 / 3))
+    def eval(self, x: float, y: float) -> float:
+        return 3 * np.cbrt(y * y)
 
 
 class NumericalSolution(Solution, ABC):
-
     def __init__(self, grid: Grid, func: Function):
         self._func = func
         super().__init__(grid)
 
 
 class EulerMethod(NumericalSolution):
-
     def _solve(self):
         h = self._grid.step
         y_prev = self._grid.y_start
@@ -78,7 +76,6 @@ class EulerMethod(NumericalSolution):
 
 
 class ImprovedEulerMethod(NumericalSolution):
-
     def _solve(self):
         h = self._grid.step
         y_prev = self._grid.y_start
@@ -93,7 +90,6 @@ class ImprovedEulerMethod(NumericalSolution):
 
 
 class RungeKuttaMethod(NumericalSolution):
-
     def _solve(self):
         h = self._grid.step
         y_prev = self._grid.y_start
@@ -113,40 +109,50 @@ class Error(ABC):
     def __init__(self, num_solution: NumericalSolution, exact_solution: ExactSolution):
         self._exact_sol = deepcopy(exact_solution)
         self._num_sol = deepcopy(num_solution)
-        self._calc()
+        self._grid = deepcopy(num_solution.get_grid())
+        self._grid.y_values.clear()
 
     @abstractmethod
     def _calc(self):
         pass
 
+    def get_grid(self) -> Grid:
+        return self._grid
+
+    def set_grid(self, new_grid: Grid):
+        self._exact_sol.set_grid(new_grid)
+        self._num_sol.set_grid(new_grid)
+        self._calc()
+
 
 class LocalError(Error):
     def __init__(self, num_solution: NumericalSolution, exact_solution: ExactSolution):
-        self._grid = deepcopy(exact_solution.get_grid())
-        self._grid.y_values.clear()
         super().__init__(num_solution, exact_solution)
+        self._calc()
 
     def _calc(self):
         for i in range(self._grid.step_num):
-            diff = abs(self._num_sol.get_grid().y_values[i] - self._exact_sol.get_grid().y_values[i])
+            diff = abs(self._exact_sol.get_grid().y_values[i] - self._num_sol.get_grid().y_values[i])
             self._grid.y_values.append(diff)
 
-    def get_grid(self) -> Grid:
-        return self._grid
+    def set_grid(self, new_grid: Grid):
+        self._grid = deepcopy(main_grid)
+        self._grid.y_values.clear()
+        super().set_grid(main_grid)
 
 
 class RangeError(Error):
     def __init__(self, num_solution: NumericalSolution, exact_solution: ExactSolution,
                  n_initial: int, n_final: int):
+        super().__init__(num_solution, exact_solution)
         self._n_initial = n_initial
         self._n_final = n_final
         self._grid = Grid(n_final - n_initial + 1, n_final, n_initial, 0)
-        super().__init__(num_solution, exact_solution)
+        self._calc()
 
     def _calc(self):
         self._grid.step_num = self._n_final - self._n_initial
-        errors = [self.__calc_for_steps(step) for step in range(self._n_initial, self._n_final + 1)]
-        self._grid.y_values = errors
+        self._grid.y_values = [self.__calc_for_steps(step) for step in range(self._n_initial, self._n_final + 1)]
 
     def __calc_for_steps(self, step_num: int) -> float:
         max_error = 0.0
@@ -155,41 +161,35 @@ class RangeError(Error):
         self._exact_sol.set_grid(new_grid)
         self._num_sol.set_grid(new_grid)
         for i in range(step_num):
-            error = abs(self._num_sol.get_grid().y_values[i] - self._exact_sol.get_grid().y_values[i])
-            if error > max_error:
-                max_error = error
+            error = abs(self._exact_sol.get_grid().y_values[i] - self._num_sol.get_grid().y_values[i])
+            max_error = max(error, max_error)
         return max_error
 
     def set_range(self, n_initial, n_final):
         self._n_initial = n_initial
         self._n_final = n_final
+        self._grid = Grid(n_final - n_initial + 1, n_final, n_initial, 0)
         self._calc()
 
-    def get_range(self):
-        return self._n_initial, self._n_final
 
-    def get_grid(self) -> Grid:
-        return self._grid
+show_exact = True
+show_euler = True
+show_imp_euler = True
+show_runge_kutta = True
 
-
-show_exact_sol = True
-show_euler_met = True
-show_imp_euler_met = True
-show_runge_kutta_err = True
-
-grid = Grid(10, 10, 2, 1)
-exact_sol = MyExactSolution(grid)
+main_grid = Grid(50, 10, 2, 1)
+exact_sol = MyExactSolution(main_grid)
 function = MyFunction()
 
-euler_met = EulerMethod(grid, function)
-imp_euler_met = ImprovedEulerMethod(grid, function)
-runge_kutta_met = RungeKuttaMethod(grid, function)
+euler_met = EulerMethod(main_grid, function)
+imp_euler_met = ImprovedEulerMethod(main_grid, function)
+runge_kutta_met = RungeKuttaMethod(main_grid, function)
 
 euler_err = LocalError(euler_met, exact_sol)
 imp_euler_err = LocalError(imp_euler_met, exact_sol)
 runge_kutta_err = LocalError(runge_kutta_met, exact_sol)
 
-rng_err_n0, rng_err_n = 10, 30
+rng_err_n0, rng_err_n = 50, 100
 euler_rng_err = RangeError(euler_met, exact_sol, rng_err_n0, rng_err_n)
 imp_euler_rng_err = RangeError(imp_euler_met, exact_sol, rng_err_n0, rng_err_n)
 runge_kutta_rng_err = RangeError(runge_kutta_met, exact_sol, rng_err_n0, rng_err_n)
