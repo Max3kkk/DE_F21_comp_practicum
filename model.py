@@ -136,9 +136,9 @@ class LocalError(Error):
             self._grid.y_values.append(diff)
 
     def set_grid(self, new_grid: Grid):
-        self._grid = deepcopy(main_grid)
+        self._grid = deepcopy(new_grid)
         self._grid.y_values.clear()
-        super().set_grid(main_grid)
+        super().set_grid(new_grid)
 
 
 class RangeError(Error):
