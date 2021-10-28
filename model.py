@@ -51,10 +51,17 @@ class Function(ABC):
     def eval(self, x: float, y: float) -> float:
         pass
 
+    @abstractmethod
+    def check_domain(self, x: float, y: float) -> bool:
+        pass
+
 
 class MyFunction(Function):
     def eval(self, x: float, y: float) -> float:
         return 3 * np.cbrt(y * y)
+
+    def check_domain(self, x: float, y: float) -> bool:
+        return y > 0
 
 
 class NumericalSolution(Solution, ABC):
@@ -152,9 +159,9 @@ class RangeError(Error):
 
     def _calc(self):
         self._grid.step_num = self._n_final - self._n_initial
-        self._grid.y_values = [self.__calc_for_steps(step) for step in range(self._n_initial, self._n_final + 1)]
+        self._grid.y_values = [self._calc_for_steps(step) for step in range(self._n_initial, self._n_final + 1)]
 
-    def __calc_for_steps(self, step_num: int) -> float:
+    def _calc_for_steps(self, step_num: int) -> float:
         max_error = 0.0
         new_grid = Grid(step_num, self._exact_sol.get_grid().x_end, self._exact_sol.get_grid().x_start,
                         self._exact_sol.get_grid().y_start)
@@ -172,24 +179,33 @@ class RangeError(Error):
         self._calc()
 
 
-show_exact = True
-show_euler = True
-show_imp_euler = True
-show_runge_kutta = True
+class Data:
+    def __init__(self, main_grid: Grid = Grid(30, 10, 2, 1), rng_err_n0: int = 30, rng_err_n: int = 100):
+        self.show_exact = True
+        self.show_euler = True
+        self.show_imp_euler = True
+        self.show_runge_kutta = True
+        self.show_dots = False
+        self.main_grid = main_grid
+        self.rng_err_n0 = rng_err_n0
+        self.rng_err_n = rng_err_n
+        self.max_step_size = 0.5
 
-main_grid = Grid(50, 10, 2, 1)
-exact_sol = MyExactSolution(main_grid)
-function = MyFunction()
+        # self.main_grid = Grid(30, 10, 2, 1)
+        self.exact_sol = MyExactSolution(main_grid)
+        self.function = MyFunction()
 
-euler_met = EulerMethod(main_grid, function)
-imp_euler_met = ImprovedEulerMethod(main_grid, function)
-runge_kutta_met = RungeKuttaMethod(main_grid, function)
+        self.euler_met = EulerMethod(main_grid, self.function)
+        self.imp_euler_met = ImprovedEulerMethod(main_grid, self.function)
+        self.runge_kutta_met = RungeKuttaMethod(main_grid, self.function)
 
-euler_err = LocalError(euler_met, exact_sol)
-imp_euler_err = LocalError(imp_euler_met, exact_sol)
-runge_kutta_err = LocalError(runge_kutta_met, exact_sol)
+        self.euler_err = LocalError(self.euler_met, self.exact_sol)
+        self.imp_euler_err = LocalError(self.imp_euler_met, self.exact_sol)
+        self.runge_kutta_err = LocalError(self.runge_kutta_met, self.exact_sol)
 
-rng_err_n0, rng_err_n = 50, 100
-euler_rng_err = RangeError(euler_met, exact_sol, rng_err_n0, rng_err_n)
-imp_euler_rng_err = RangeError(imp_euler_met, exact_sol, rng_err_n0, rng_err_n)
-runge_kutta_rng_err = RangeError(runge_kutta_met, exact_sol, rng_err_n0, rng_err_n)
+        self.euler_rng_err = RangeError(self.euler_met, self.exact_sol, rng_err_n0, rng_err_n)
+        self.imp_euler_rng_err = RangeError(self.imp_euler_met, self.exact_sol, rng_err_n0, rng_err_n)
+        self.runge_kutta_rng_err = RangeError(self.runge_kutta_met, self.exact_sol, rng_err_n0, rng_err_n)
+
+
+dt = Data()

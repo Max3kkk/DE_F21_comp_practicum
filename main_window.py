@@ -3,8 +3,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import view
 
 
-class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
+class UiMainWindow(object):
+    def _setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1224, 804)
         MainWindow.setToolTip("")
@@ -202,9 +202,9 @@ class Ui_MainWindow(object):
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
-        self.retranslateUi(MainWindow)
+        self._retranslateUi(MainWindow)
 
-    def retranslateUi(self, MainWindow):
+    def _retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Computational Practicum"))
         self.n0_err_label.setText(_translate("MainWindow",
